@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Animated, TouchableOpacity, Image, Text, StyleSheet, View, Dimensions } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,7 +31,14 @@ export const handleScroll = (event: any) => {
   lastScrollY = currentScrollY;
 };
 
-const HomeBottomMenu = () => {
+type Props = {
+  onHomePress: () => void;
+  onMeetingPress: () => void;
+  onChattingPress: () => void;
+  onCalendarPress: () => void;
+}
+
+const HomeBottomMenu = ({onHomePress, onMeetingPress, onChattingPress, onCalendarPress}: Props) => {
   return (
     <Animated.View
       style={[
@@ -38,21 +46,21 @@ const HomeBottomMenu = () => {
         { transform: [{ translateY: bottomAnim }] }, // 애니메이션 적용
       ]}
     >
-      <TouchableOpacity style={styles.bottomButton}>
+      <TouchableOpacity style={styles.bottomButton} onPress={onHomePress}>
         <Image source={require('../images/home_icon.png')} style={styles.bottomImage}></Image>
         <Text style={styles.bottomButtonText}>홈</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.bottomButton}>
-        <Image source={require('../images/home_icon.png')} style={styles.bottomImage}></Image>
-        <Text style={styles.bottomButtonText}>사람 모집</Text>
+      <TouchableOpacity style={styles.bottomButton} onPress={onMeetingPress}>
+        <Image source={require('../images/meeting_icon.png')} style={styles.bottomImage}></Image>
+        <Text style={styles.bottomButtonText}>모임</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.bottomButton}>
-        <Image source={require('../images/home_icon.png')} style={styles.bottomImage}></Image>
-        <Text style={styles.bottomButtonText}>Known</Text>
+      <TouchableOpacity style={styles.bottomButton} onPress={onChattingPress}>
+        <Image source={require('../images/chatting_icon.png')} style={styles.bottomImage}></Image>
+        <Text style={styles.bottomButtonText}>채팅</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.bottomButton}>
-        <Image source={require('../images/home_icon.png')} style={styles.bottomImage}></Image>
-        <Text style={styles.bottomButtonText}>Known</Text>
+      <TouchableOpacity style={styles.bottomButton} onPress={onCalendarPress}>
+        <Image source={require('../images/calendar_icon.png')} style={styles.bottomImage}></Image>
+        <Text style={styles.bottomButtonText}>일정</Text>
       </TouchableOpacity>
     </Animated.View>
   );

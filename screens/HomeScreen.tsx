@@ -1,11 +1,11 @@
 import React, {useState, useRef} from 'react';
-import { View, TextInput, ScrollView, Text, TouchableOpacity, Animated, Image, StyleSheet, ImageBackground, Button } from 'react-native';
+import { View, Platform, TextInput, ScrollView, Text, TouchableOpacity, Animated, Image, StyleSheet, ImageBackground, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import HomeCategory from '../component/HomeCategory';
 import HomeBottomMenu, { handleScroll } from '../component/HomeBottomMenu';
 import HomeSearch from '../component/HomeSearch';
 import HomeImageSlide from '../component/HomeImageSlide';
-
+import HomeTitle from '../component/HomeTitle';
 
 type HomeScreenNavigationProp = StackNavigationProp<any, 'Home'>;
 
@@ -27,9 +27,10 @@ const HomeScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Image source={require('../images/logo_white.png')} style={styles.titleLogo} />
-      </View>
+      <HomeTitle
+        onMenuPress={() => navigation.navigate('Home')} 
+        onMyPagePress={() => navigation.navigate('FirstMypage')} 
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContent} onScroll={handleScroll} scrollEventThrottle={16}>
 
@@ -41,7 +42,12 @@ const HomeScreen = ({ navigation }: Props) => {
 
       </ScrollView>
 
-      <HomeBottomMenu />
+      <HomeBottomMenu 
+        onHomePress={() => navigation.navigate('Home')}
+        onMeetingPress={() => navigation.navigate('Meeting')}
+        onChattingPress={() => navigation.navigate('Chatting')}
+        onCalendarPress={() => navigation.navigate('Calendar')}
+      />
     </View>
   );
 };
@@ -52,14 +58,6 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     backgroundColor: '#ffffff'
-  },
-  titleContainer: {
-    flexDirection:'row',
-  },
-  titleLogo: {
-    width: 320, 
-    height: 60,
-    resizeMode: 'contain',
   },
   scrollContent: {
     alignItems: 'center',

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48954214343",
+    "project_id": "festanow-203b7",
+    "storage_bucket": "festanow-203b7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48954214343:android:ce610777c7d37a63fcfbe2",
+        "android_client_info": {
+          "package_name": "com.festanow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKcS375lAbXVDtjBCnJK2pGY5Zt8Y9e2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
