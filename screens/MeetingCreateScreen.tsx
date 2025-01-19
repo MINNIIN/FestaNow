@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DateSelect from '../component/DateSelect'; 
 import CreatePostButton from "../component/CreatePostButton";
 import auth from '@react-native-firebase/auth';
-import ImageUploader from "../component/MeetingComponent/ImageUploader";
+// import ImageUploader from "../component/MeetingComponent/ImageUploader";
 
 const { width, height } = Dimensions.get('window');
 
@@ -126,7 +126,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
 
           <ScrollView style={styles.scrollContainer}>
 
-            <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} />
+            {/* <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} /> */}
 
             <TextInput
               placeholder="내용을 입력해주세요."
