@@ -4,9 +4,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from '@react-native-firebase/firestore'; 
 import ScreenTitle from "../component/ScreenTitle";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DateSelect from '../component/DateSelect'; // DateSelect 컴포넌트 import
+import DateSelect from '../component/DateSelect'; 
 import CreatePostButton from "../component/CreatePostButton";
 import auth from '@react-native-firebase/auth';
+import ImageUploader from "../component/MeetingComponent/ImageUploader";
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,7 +23,10 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
   const [performanceDate, setPerformanceDate] = useState(new Date()); 
   const [participants, setParticipants] = useState("");
   const [writeContent, setWriteContent] = useState("");
-  const [showDatePicker, setShowDatePicker] = useState(false); 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  
+  
 
   const handleCreatePost = async () => {
 
@@ -38,7 +42,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
   }
 
   try {
-    // 1. 현재 사용자 uid로 users 컬렉션에서 nicName 가져오기
+    // 현재 사용자 uid로 users 컬렉션에서 nicName 가져오기
     const userDoc = await firestore().collection('users').doc(currentUser.uid).get();
     if (!userDoc.exists) {
       window.alert('사용자 정보를 찾을 수 없습니다.');
@@ -56,6 +60,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
       writeContent,
       authorId: currentUser.uid,
       authorNicname: nicName,
+      imageUrl,
     };
 
     
@@ -85,7 +90,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
           />
 
           <TextInput
-            placeholder="인원"
+            placeholder="모집 인원"
             value={participants}
             onChangeText={setParticipants}
             keyboardType="numeric"
@@ -120,6 +125,9 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
           )}
 
           <ScrollView style={styles.scrollContainer}>
+
+            <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} />
+
             <TextInput
               placeholder="내용을 입력해주세요."
               value={writeContent}

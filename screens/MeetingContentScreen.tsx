@@ -4,11 +4,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from '@react-native-firebase/firestore';
 import { RootStackParamList } from '../App'; 
 import { Menu, IconButton, Provider } from 'react-native-paper'; 
-import MeetingContentTitle from "../component/MeetingContentTitle";
+import MeetingContentTitle from "../component/MeetingComponent/MeetingContentTitle";
 import auth from '@react-native-firebase/auth';
-import MeetingJoinButton from "../component/MeetingJoinButton";
-import AuthorContentView from "../component/AuthorContentView";
-import NonAuthorContentView from "../component/NonAuthorContentView";
+import MeetingJoinButton from "../component/MeetingComponent/MeetingJoinButton";
+import AuthorContentView from "../component/MeetingComponent/AuthorContentView";
+import NonAuthorContentView from "../component/MeetingComponent/NonAuthorContentView";
 import HomeBottomMenu, { handleScroll } from "../component/HomeBottomMenu";
 
 type MeetingContentScreenNavigationProp = StackNavigationProp<any, 'MeetingContent'>;

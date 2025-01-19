@@ -2,18 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Dimensions, StyleSheet, Alert, TouchableOpacity, ScrollView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from '@react-native-firebase/firestore';
-import { RootStackParamList } from '../App'; 
-import { Menu, IconButton, Provider } from 'react-native-paper'; 
-import MeetingContentTitle from "../component/MeetingContentTitle";
-import auth from '@react-native-firebase/auth';
-import MeetingJoinButton from "../component/MeetingJoinButton";
+
 
 const { width, height } = Dimensions.get('window');
 
-const AuthorContentView = ({ post, navigation }: { post: any; navigation: any }) => {
+const NonAuthorContentView = ({ post, navigation }: { post: any; navigation: any }) => {
     const handleEdit = () => {
       console.log('수정 클릭');
-      // 수정 로직
+      
     };
   
     const handleDelete = async () => {
@@ -48,42 +44,42 @@ const AuthorContentView = ({ post, navigation }: { post: any; navigation: any })
                 <Text style={styles.date}>작성 일자 : {new Date(post.performanceDate).toLocaleDateString()}</Text>
                 <Text style={styles.date}>모집 인원 : {post.participants}</Text>
                 <Text style={styles.content}>{post.writeContent}</Text>
+
+                
         </View>
+
     );
-
-    
-
   };
 
   const styles = StyleSheet.create({
     contentContainer: {
-      marginTop:50,
-      flex: 1,
-      padding: 10,
-      width: '100%',
-      
-      backgroundColor: '#ffffff'
-    },
-    title: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      marginBottom: 10,
-    },
-    subTitle: {
-      fontSize: 16,
-      color: 'gray',
-      marginBottom: 10,
-    },
-    date: {
-      fontSize: 16,
-      color: 'gray',
-      marginBottom: 15,
-    },
-    content: {
-      fontSize: 16,
-      lineHeight: 22,
-      marginBottom: 20,
-    },
+        marginTop:50,
+        flex: 1,
+        padding: 10,
+        width: '100%',
+        
+        backgroundColor: '#ffffff'
+      },
+      title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      subTitle: {
+        fontSize: 16,
+        color: 'gray',
+        marginBottom: 10,
+      },
+      date: {
+        fontSize: 16,
+        color: 'gray',
+        marginBottom: 15,
+      },
+      content: {
+        fontSize: 16,
+        lineHeight: 22,
+        marginBottom: 20,
+      },
   });
   
-  export default AuthorContentView;
+  export default NonAuthorContentView;

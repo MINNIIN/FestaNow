@@ -18,7 +18,7 @@ type Props = {
 const HomeScreen = ({ navigation }: Props) => {
   const [searchText, setSearchText] = useState('');
 
-  const categoriyButton = [
+  const categoryButton = [
     { id: 1, label: '콘서트', icon: require('../images/concert_icon.png') },
     { id: 2, label: '뮤지컬', icon: require('../images/musical_icon.png') },
     { id: 3, label: '전시', icon: require('../images/gallery_icon.png') },
@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
       <HomeImageSlide />
       <HomeSearch searchText={searchText} setSearchText={setSearchText} />
-      <HomeCategory categories={categoriyButton} />
+      <HomeCategory categories={categoryButton} />
       
       
 

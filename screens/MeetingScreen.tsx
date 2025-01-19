@@ -53,7 +53,7 @@ const MeetingScreen = ({ navigation }: Props) => {
         onMyPagePress={() => navigation.navigate('FirstMypage')}
       />
 
-      <Text style={styles.topText}>여기에서 관심 있는 모임에 참여하거나 새로운 모임을 만들어보세요!</Text>
+      <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text>
 
       <FlatList
         data={posts}
@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: '#555',
-    marginVertical: 10,
+    textAlign: 'center',
+    marginVertical: height * 0.02,
     marginHorizontal: width * 0.05,
   },
   listContainer: {

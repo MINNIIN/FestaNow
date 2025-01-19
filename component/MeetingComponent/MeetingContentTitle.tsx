@@ -27,11 +27,11 @@ const MeetingContentTitle = ({
     <Provider>
       <View style={styles.titleContainer}>
         <TouchableOpacity onPress={onLeftPress} style={styles.iconButton}>
-          <Image source={require('../images/left_icon.png')} style={styles.iconImage} />
+          <Image source={require('../../images/left_icon.png')} style={styles.iconImage} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onLogoPress}>
-          <Image source={require('../images/logo_white.png')} style={styles.titleLogo} />
+          <Image source={require('../../images/logo_white.png')} style={styles.titleLogo} />
         </TouchableOpacity>
 
         <Menu
@@ -40,7 +40,7 @@ const MeetingContentTitle = ({
   anchor={
     <TouchableOpacity onPress={onMenuToggle} style={styles.menuButton}>
       <Image 
-        source={require('../images/dots_icon.png')}  // 원하는 이미지 경로로 변경
+        source={require('../../images/dots_icon.png')}  // 원하는 이미지 경로로 변경
         style={styles.menuImage}
       />
     </TouchableOpacity>
