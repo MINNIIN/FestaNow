@@ -13,6 +13,7 @@ import SignupScreen from './screens/SignupScreen';
 import LoginInputScreen from './screens/LoginInputScren';
 import FirstSignupScreen from './screens/FirstSignupScreen';
 import FirstMypageScreen from './screens/FirstMypageScreen';
+import ScheduleScreen from './screens/ScheduleSceen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -27,6 +28,7 @@ export type RootStackParamList = {
   Signup: undefined;
   FirstSignup: undefined;
   FirstMypage: undefined;
+  Schedule: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -47,6 +49,7 @@ const App = () => {
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="FirstSignup" component={FirstSignupScreen} />
         <Stack.Screen name="FirstMypage" component={FirstMypageScreen} />
+        <Stack.Screen name="Schedule" component={ScheduleScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
