@@ -9,6 +9,7 @@ import CreatePostButton from "../component/CreatePostButton";
 import auth from '@react-native-firebase/auth';
 import ImageUploader from "../component/MeetingComponent/ImageUploader";
 
+
 const { width, height } = Dimensions.get('window');
 
 type MeetingCreateScreenNavigationProp = StackNavigationProp<any, 'MeetingCreate'>;
@@ -80,6 +81,9 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
           onLogoPress={() => navigation.navigate('Home')}
           onMyPagePress={() => navigation.navigate('FirstMypage')}
         />
+        <ScrollView>
+
+        <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} />
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -126,8 +130,6 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
 
           <ScrollView style={styles.scrollContainer}>
 
-            <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} />
-
             <TextInput
               placeholder="내용을 입력해주세요."
               value={writeContent}
@@ -139,6 +141,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
         </View>
 
         <CreatePostButton onPress={handleCreatePost} />
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
