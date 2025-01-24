@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, ScrollView, StyleSheet, Text, Dimensions, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, TextInput, Button, ScrollView, StyleSheet, Text, Alert, Dimensions, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from '@react-native-firebase/firestore'; 
 import ScreenTitle from "../component/ScreenTitle";
@@ -83,7 +83,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
         />
         <ScrollView>
 
-        <ImageUploader onUploadComplete={(url: string) => setImageUrl(url)} />
+        <ImageUploader />
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   scrollContainer: {
-    marginBottom: 15,
+    
   },
 });
 

@@ -1,6 +1,5 @@
-// CreatePostButton.tsx
 import React from 'react';
-import { Button, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 type CreatePostButtonProps = {
   onPress: () => void;
@@ -8,13 +7,26 @@ type CreatePostButtonProps = {
 
 const CreatePostButton: React.FC<CreatePostButtonProps> = ({ onPress }) => {
   return (
-    <Button title="작성 완료" onPress={onPress} />
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Text style={styles.buttonText}>작성 완료</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 20,
+    backgroundColor: '#4374D9', 
+    paddingVertical: 12, 
+    paddingHorizontal: 30, 
+    borderRadius: 15, 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+  buttonText: {
+    color: 'white', 
+    fontSize: 16, 
+    
   },
 });
 
