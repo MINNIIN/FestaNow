@@ -28,7 +28,7 @@ const DateSelect: React.FC<DateSelectProps> = ({ performanceDate, setPerformance
 const styles = StyleSheet.create({
   dateButton: {
     width: '100%',
-    backgroundColor: '#EAEAEA', 
+    backgroundColor: '#4374D9', 
     paddingVertical: 10,         
     paddingHorizontal: 20,       
     marginBottom: 20,            
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   dateButtonText: {
     fontSize: 14,                
-    color: '#747474',
+    color: 'white',
     textAlign: 'center',
   },
 });
