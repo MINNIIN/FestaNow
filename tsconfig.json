@@ -1,17 +1,11 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
-  
   "compilerOptions": {
     "lib": ["esnext", "dom"],
+    "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@env": ["src/types/env.d.ts"] // @env 경로 매핑
-    },
-    
-  },
-  
-  "include": [
-    "src/**/*",             // 프로젝트 src 디렉토리 포함
-    "src/types/env.d.ts"    // 타입 선언 파일 포함
-  ]
+      "@env": ["node_modules/react-native-dotenv"]
+    }
+  }
 }
