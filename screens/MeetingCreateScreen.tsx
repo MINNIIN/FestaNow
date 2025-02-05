@@ -157,7 +157,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
               style={styles.input}
             />
             <TextInput
-              placeholder="공연 이름"
+              placeholder="공연(아티스트) 이름"
               value={performanceName}
               onChangeText={setPerformanceName}
               style={styles.input}
