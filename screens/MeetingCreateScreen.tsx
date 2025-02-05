@@ -12,6 +12,9 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { S3_BUCKET, REGION, AWS_ACCESS, AWS_SECRET } from '@env';
 import RNFS from 'react-native-fs';
 import { Buffer } from "buffer";
+import 'react-native-url-polyfill/auto';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,8 +46,10 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
   // 이미지 S3 업로드 함수
   const uploadImageToS3 = async (imageUri: string) => {
     try {
+      console.log('선택된 이미지 경로:', imageUri);
+  
       const fileName = imageUri.split('/').pop(); // 파일 이름 추출
-      const filePath = imageUri.replace('file://', ''); // 경로 정리
+      const filePath = imageUri.replace('file://', ''); // file:// 제거
   
       // 이미지 파일을 base64로 변환
       const base64Image = await RNFS.readFile(filePath, 'base64');
@@ -55,7 +60,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
       const uploadParams = {
         Bucket: S3_BUCKET,
         Key: fileName,
-        Body: binaryData,  // 🔥 Binary 데이터로 변환하여 업로드
+        Body: binaryData,  // 바이너리 데이터로 변환하여 업로드
         ContentType: 'image/jpeg', // 이미지 타입 지정
       };
   
@@ -68,7 +73,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
       // 업로드된 이미지의 URL 반환
       return `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${fileName}`;
     } catch (error) {
-      console.error('이미지 업로드 실패:', error);
+      console.error('이미지 업로드 실패:', error); // 에러 로그 확인
       return null;
     }
   };
@@ -113,6 +118,7 @@ const MeetingCreateScreen = ({ navigation }: Props) => {
         authorId: currentUser.uid,
         authorNicname: nicName,
         imageUrl: uploadedImageUrl, // S3 이미지 URL 저장
+        createdAt: firestore.FieldValue.serverTimestamp(), // 작성 시간
       };
 
       await firestore().collection('meetings').add(newPost);

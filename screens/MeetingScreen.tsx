@@ -17,9 +17,13 @@ type Props = {
 const MeetingScreen = ({ navigation }: Props) => {
   const [posts, setPosts] = useState<any[]>([]);
 
+  // 사용자가 이미지 선택 안 했을 경우 기본 이미지
+  const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/fn_logo.png';
+
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('meetings')
+      .orderBy('createdAt', 'desc') // 작성 시간 내림차순 정렬
       .onSnapshot(
         snapshot => {
           if (!snapshot.empty) {
@@ -65,7 +69,7 @@ const MeetingScreen = ({ navigation }: Props) => {
           >
             {/* 카드 이미지 */}
             <Image 
-              source={{ uri: item.imageUrl || 'https://via.placeholder.com/150' }} 
+              source={{ uri: item.imageUrl || defaultImage }} 
               style={styles.cardImage}
             />
             {/* 카드 텍스트 */}
@@ -127,11 +131,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cardImage: {
-    width: width * 0.3,
-    height: width * 0.3,
-    resizeMode: 'contain',  
-    borderRadius: 10,  
-    
+    width: width * 0.3,  
+    height: width * 0.3, 
+    borderRadius: 10, 
+    resizeMode: 'cover',
   },
   cardContent: {
     flex: 1,
