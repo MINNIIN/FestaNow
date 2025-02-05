@@ -18,7 +18,7 @@ const MeetingScreen = ({ navigation }: Props) => {
   const [posts, setPosts] = useState<any[]>([]);
 
   // 사용자가 이미지 선택 안 했을 경우 기본 이미지
-  const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/fn_logo.png';
+  const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/default+image.png';
 
   useEffect(() => {
     const unsubscribe = firestore()
