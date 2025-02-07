@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { signOut } from '../authService';
 import { StackNavigationProp } from '@react-navigation/stack';
 import ScreenTitle from '../component/ScreenTitle';
@@ -103,6 +103,12 @@ const FirstMypageScreen = ({ navigation }: Props) => {
       <MyPageCategory categories={categoryButton} onCategoryPress={handleCategoryPress} />
 
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
+      <TouchableOpacity onPress={() => console.log('최근 본 상품 클릭')}>
+        <Text style={styles.textButton}>최근 본 상품</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => console.log('공지사항 클릭')}>
+        <Text style={styles.textButton}>공지사항</Text>
+      </TouchableOpacity>
 
       <HomeBottomMenu 
         onHomePress={() => navigation.navigate('Home')}
@@ -137,7 +143,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center', 
     alignItems: 'center', 
-  }
+  },
+  
+  textButton: {
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    textAlign: 'left',
+    marginBottom: 15,
+    backgroundColor: 'transparent', // 배경 색을 투명하게 설정하여 버튼처럼 보이지 않게
+  },
 });
 
 export default FirstMypageScreen;
