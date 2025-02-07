@@ -10,8 +10,15 @@ import HomeBottomMenu from "../component/HomeBottomMenu";
 import DateTimePickerModal from "react-native-modal-datetime-picker";  
 import { ScrollView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const ScheduleScreen = ({ navigation }) => {
+type ScheduleScreenNavigationProp = StackNavigationProp<any, 'Schedule'>;
+
+type Props = {
+  navigation: ScheduleScreenNavigationProp; 
+};
+
+const ScheduleScreen = ({ navigation }: Props) => {
   const today = moment().format("YYYY-MM-DD");
   const [selectedDate, setSelectedDate] = useState<string | null>(today);
   const [notes, setNotes] = useState<{ [date: string]: string }>({});
