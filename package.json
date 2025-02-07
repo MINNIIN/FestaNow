@@ -19,11 +19,14 @@
     "@react-native-seoul/naver-login": "^4.0.4",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
+    "buffer": "^6.0.3",
     "react": "18.3.1",
     "react-native": "0.76.5",
     "react-native-calendars": "^1.1308.1",
     "react-native-dotenv": "^3.4.11",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.21.2",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-image-picker": "^7.2.3",
     "react-native-image-slider-box": "^2.0.7",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
@@ -33,7 +36,9 @@
     "react-native-safe-area-context": "^5.0.0",
     "react-native-screens": "^4.4.0",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-vector-icons": "^10.2.0",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

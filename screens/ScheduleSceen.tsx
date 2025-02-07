@@ -11,7 +11,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-
 const ScheduleScreen = ({ navigation }) => {
   const today = moment().format("YYYY-MM-DD");
   const [selectedDate, setSelectedDate] = useState<string | null>(today);
