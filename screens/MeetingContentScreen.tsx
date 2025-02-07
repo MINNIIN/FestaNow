@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Dimensions, StyleSheet, Alert, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Dimensions, StyleSheet, Alert, KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from '@react-native-firebase/firestore';
 import { RootStackParamList } from '../App'; 
@@ -10,6 +10,7 @@ import MeetingJoinButton from "../component/MeetingComponent/MeetingJoinButton";
 import AuthorContentView from "../component/MeetingComponent/AuthorContentView";
 import NonAuthorContentView from "../component/MeetingComponent/NonAuthorContentView";
 import HomeBottomMenu, { handleScroll } from "../component/HomeBottomMenu";
+import ContentComment from "../component/MeetingComponent/ContentComment";
 
 type MeetingContentScreenNavigationProp = StackNavigationProp<any, 'MeetingContent'>;
 
@@ -110,42 +111,50 @@ const MeetingContentScreen = ({ route, navigation }: Props) => {
 
   return (
     <Provider>
-      <View style={styles.container}>
-      
-      <View style={styles.fixedHeader}>
-        <MeetingContentTitle
-          onLeftPress={() => navigation.goBack()}
-          onLogoPress={() => navigation.navigate('Home')}
-          onEditPress={handleEdit}
-          onDeletePress={handleDelete}
-          isAuthor={isAuthor}  // isAuthor 상태 전달
-          menuVisible={menuVisible}
-          onMenuToggle={handleMenuToggle}
-        />
-      </View>
-
-        <ScrollView contentContainerStyle={styles.scrollContent} >
-        {isAuthor ? (
-          <AuthorContentView post={post} navigation={navigation} />
-        ) : (
-          <NonAuthorContentView post={post} navigation={navigation} />
-        )}
-        </ScrollView>
-
-        {!isAuthor && (
-          <MeetingJoinButton postId={post.id} userId={auth().currentUser?.uid || ''} />
-        )}
-
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         
-      <HomeBottomMenu 
-        onHomePress={() => navigation.navigate('Home')}
-        onMeetingPress={() => navigation.navigate('Meeting')}
-        onChattingPress={() => navigation.navigate('Chatting')}
-        onCalendarPress={() => navigation.navigate('Calendar')}
-      />
+          <View>
+            <View style={styles.fixedHeader}>
+              <MeetingContentTitle
+                onLeftPress={() => navigation.goBack()}
+                onLogoPress={() => navigation.navigate('Home')}
+                onEditPress={handleEdit}
+                onDeletePress={handleDelete}
+                isAuthor={isAuthor}  // isAuthor 상태 전달
+                menuVisible={menuVisible}
+                onMenuToggle={handleMenuToggle}
+              />
+            </View>
 
-    </View>
-      
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              {isAuthor ? (
+                <AuthorContentView post={post} navigation={navigation} />
+              ) : (
+                <NonAuthorContentView post={post} navigation={navigation} />
+              )}
+
+              <ContentComment postId={post.id} />
+            </ScrollView>
+
+            {!isAuthor && (
+              <MeetingJoinButton postId={post.id} userId={auth().currentUser?.uid || ''} />
+            )}
+
+            {/* HomeBottomMenu는 키보드 영향을 받지 않도록 분리 */}
+            <View style={styles.bottomMenuContainer}>
+              <HomeBottomMenu 
+                onHomePress={() => navigation.navigate('Home')}
+                onMeetingPress={() => navigation.navigate('Meeting')}
+                onChattingPress={() => navigation.navigate('Chatting')}
+                onCalendarPress={() => navigation.navigate('Calendar')}
+              />
+            </View>
+          </View>
+        
+      </KeyboardAvoidingView>
     </Provider>
   );
 };
@@ -153,7 +162,7 @@ const MeetingContentScreen = ({ route, navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1, // 화면 전체를 차지하도록 설정
-    backgroundColor: '#5d5d5d',
+    backgroundColor: '#fff',
   },
   fixedHeader: {
     position: 'absolute',  // 화면 상단에 고정
@@ -164,9 +173,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',  // 상단 타이틀의 배경 색상 설정
   },
   scrollContent: {
+    flexGrow: 1,  // 컨텐츠의 길이에 맞게 스크롤 가능하도록 설정
     alignItems: 'center',
-    
-    height: 1000, // 임의로 지정함 나중에 콘텐츠 길이에 따라서 스크롤 길이가 조정되도록 수정해야함
+    paddingBottom: 150,  // 하단 공간 확보
+  },
+  bottomMenuContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff", // 배경색을 추가해 키보드 올라왔을 때 깜빡이는 문제 방지
   },
 });
 
