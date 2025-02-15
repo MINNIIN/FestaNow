@@ -14,6 +14,7 @@ import LoginInputScreen from './screens/LoginInputScren';
 import FirstSignupScreen from './screens/FirstSignupScreen';
 import FirstMypageScreen from './screens/FirstMypageScreen';
 import ScheduleScreen from './screens/ScheduleSceen';
+import MeetingSearchScreen from './screens/MeetingSearchScreen';
 
 import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
@@ -33,6 +34,7 @@ export type RootStackParamList = {
   FirstSignup: undefined;
   FirstMypage: undefined;
   Schedule: undefined;
+  MeetingSearch: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -54,6 +56,7 @@ const App = () => {
         <Stack.Screen name="FirstSignup" component={FirstSignupScreen} />
         <Stack.Screen name="FirstMypage" component={FirstMypageScreen} />
         <Stack.Screen name="Schedule" component={ScheduleScreen} />
+        <Stack.Screen name="MeetingSearch" component={MeetingSearchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
