@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import ScreenTitle from "../component/ScreenTitle";
+import MeetingTitle from "../component/MeetingTitle";
 import { StackNavigationProp } from "@react-navigation/stack";
 import HomeBottomMenu from "../component/HomeBottomMenu";
 import firestore from '@react-native-firebase/firestore';
 import Writing from "../component/Writing";
+import MeetingCategory from "../component/MeetingComponent/MeetingCategory";
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,27 +22,18 @@ const MeetingScreen = ({ navigation }: Props) => {
   const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/default+image.png';
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection('meetings')
-      .orderBy('createdAt', 'desc') // 작성 시간 내림차순 정렬
-      .onSnapshot(
-        snapshot => {
-          if (!snapshot.empty) {
-            const newPosts = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            setPosts(newPosts);
-          } else {
-            console.log('meetings 컬렉션에 문서가 없습니다.');
-          }
-        },
-        error => {
-          console.error('Firestore 데이터 읽기 중 오류 발생:', error);
-        }
-      );
+    // REST API를 통해 데이터 가져오기
+    const fetchMeetings = async () => {
+      try {  // AWS EC2에 API 배포 후 해당 서버 고정 url 가져옴
+        const response = await fetch("http://43.200.57.176:3000/api/meetings");
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("서버에서 데이터 가져오기 실패:", error);
+      }
+    };
 
-    return () => unsubscribe();
+    fetchMeetings();
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -51,13 +43,16 @@ const MeetingScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle
+      <MeetingTitle
         onLeftPress={() => navigation.navigate('Home')} 
         onLogoPress={() => navigation.navigate('Home')}
-        onMyPagePress={() => navigation.navigate('FirstMypage')}
+        onSearchPress={() => navigation.navigate('MeetingSearch')}
       />
 
-      <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text>
+      {/* <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text> */}
+      <MeetingCategory 
+      onMyMeetingCheckPress={() => navigation.navigate('MyMeetingApplication')}
+      onApplicationCheckPress={() => navigation.navigate('ApplicationCheck')}/>
 
       <FlatList
         data={posts}
@@ -94,7 +89,7 @@ const MeetingScreen = ({ navigation }: Props) => {
         onHomePress={() => navigation.navigate('Home')}
         onMeetingPress={() => navigation.navigate('Meeting')}
         onChattingPress={() => navigation.navigate('Chatting')}
-        onCalendarPress={() => navigation.navigate('Calendar')}
+        onCalendarPress={() => navigation.navigate('Schedule')}
       />
     </View>
   );
@@ -103,7 +98,7 @@ const MeetingScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: '100%',
+    height: height,
     backgroundColor: '#ffffff',
   },
   topText: {

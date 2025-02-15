@@ -6,6 +6,10 @@ import HomeBottomMenu, { handleScroll } from '../component/HomeBottomMenu';
 import HomeSearch from '../component/HomeSearch';
 import HomeImageSlide from '../component/HomeImageSlide';
 import HomeTitle from '../component/HomeTitle';
+import messaging from '@react-native-firebase/messaging';
+import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 type HomeScreenNavigationProp = StackNavigationProp<any, 'Home'>;
 
@@ -25,6 +29,22 @@ const HomeScreen = ({ navigation }: Props) => {
     { id: 4, label: '클래식', icon: require('../images/classic_icon.png') },
   ];
 
+  // const getFcmToken = async () => {
+  //   const fcmToken = await messaging().getToken();
+  //   console.log('FCM Token:', fcmToken);
+
+  //   const currentUser = auth().currentUser;
+  //     if (currentUser) {
+  //       await firestore().collection('users').doc(currentUser.uid).set(
+  //         {
+  //           fcmToken: fcmToken, // FCM 토큰 저장
+  //         },
+  //         { merge: true } // 기존 데이터 덮어쓰지 않도록 merge 옵션 사용
+  //       );
+  //       console.log('FCM 토큰 Firestore에 저장 성공');
+  //     }
+  // }
+  
   return (
     <View style={styles.container}>
       <HomeTitle

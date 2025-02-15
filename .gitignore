@@ -75,3 +75,6 @@ yarn-error.log
 
 # 엑세스 키, 시크릿 키 있으므로 제외하고 올려야함
 .env
+
+# 안드로이드 스튜디오 AWS KEY 업로드 제외
+android/app/src/main/assets/index.android.bundle
