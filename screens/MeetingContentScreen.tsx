@@ -149,7 +149,7 @@ const MeetingContentScreen = ({ route, navigation }: Props) => {
                 onHomePress={() => navigation.navigate('Home')}
                 onMeetingPress={() => navigation.navigate('Meeting')}
                 onChattingPress={() => navigation.navigate('Chatting')}
-                onCalendarPress={() => navigation.navigate('Calendar')}
+                onCalendarPress={() => navigation.navigate('Schedule')}
               />
             </View>
           </View>

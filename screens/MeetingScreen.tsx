@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Dimensions, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import ScreenTitle from "../component/ScreenTitle";
+import MeetingTitle from "../component/MeetingTitle";
 import { StackNavigationProp } from "@react-navigation/stack";
 import HomeBottomMenu from "../component/HomeBottomMenu";
 import firestore from '@react-native-firebase/firestore';
@@ -21,27 +21,18 @@ const MeetingScreen = ({ navigation }: Props) => {
   const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/default+image.png';
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection('meetings')
-      .orderBy('createdAt', 'desc') // 작성 시간 내림차순 정렬
-      .onSnapshot(
-        snapshot => {
-          if (!snapshot.empty) {
-            const newPosts = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
-            setPosts(newPosts);
-          } else {
-            console.log('meetings 컬렉션에 문서가 없습니다.');
-          }
-        },
-        error => {
-          console.error('Firestore 데이터 읽기 중 오류 발생:', error);
-        }
-      );
+    // 🔹 REST API를 통해 데이터 가져오기
+    const fetchMeetings = async () => {
+      try {  // 서버 URL에 맞게 변경, 임의로 IPv4 주소로 진행 중(IPv4 주소 컴퓨터 껐다 킬 때마다 계속 바뀌는 단점), 최종적으로 서버를 외부에 배포하고 사용해야함
+        const response = await fetch("http://43.200.57.176:3000/api/meetings");
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("서버에서 데이터 가져오기 실패:", error);
+      }
+    };
 
-    return () => unsubscribe();
+    fetchMeetings();
   }, []);
 
   const formatDate = (dateString: string) => {
@@ -51,10 +42,10 @@ const MeetingScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <ScreenTitle
+      <MeetingTitle
         onLeftPress={() => navigation.navigate('Home')} 
         onLogoPress={() => navigation.navigate('Home')}
-        onMyPagePress={() => navigation.navigate('FirstMypage')}
+        onSearchPress={() => navigation.navigate('MeetingSearch')}
       />
 
       <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text>
@@ -94,7 +85,7 @@ const MeetingScreen = ({ navigation }: Props) => {
         onHomePress={() => navigation.navigate('Home')}
         onMeetingPress={() => navigation.navigate('Meeting')}
         onChattingPress={() => navigation.navigate('Chatting')}
-        onCalendarPress={() => navigation.navigate('Calendar')}
+        onCalendarPress={() => navigation.navigate('Schedule')}
       />
     </View>
   );
