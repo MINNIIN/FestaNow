@@ -5,6 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import HomeBottomMenu from "../component/HomeBottomMenu";
 import firestore from '@react-native-firebase/firestore';
 import Writing from "../component/Writing";
+import MeetingCategory from "../component/MeetingComponent/MeetingCategory";
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,9 +22,9 @@ const MeetingScreen = ({ navigation }: Props) => {
   const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/default+image.png';
 
   useEffect(() => {
-    // 🔹 REST API를 통해 데이터 가져오기
+    // REST API를 통해 데이터 가져오기
     const fetchMeetings = async () => {
-      try {  // 서버 URL에 맞게 변경, 임의로 IPv4 주소로 진행 중(IPv4 주소 컴퓨터 껐다 킬 때마다 계속 바뀌는 단점), 최종적으로 서버를 외부에 배포하고 사용해야함
+      try {  // AWS EC2에 API 배포 후 해당 서버 고정 url 가져옴
         const response = await fetch("http://43.200.57.176:3000/api/meetings");
         const data = await response.json();
         setPosts(data);
@@ -48,7 +49,10 @@ const MeetingScreen = ({ navigation }: Props) => {
         onSearchPress={() => navigation.navigate('MeetingSearch')}
       />
 
-      <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text>
+      {/* <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text> */}
+      <MeetingCategory 
+      onMyMeetingCheckPress={() => navigation.navigate('MyMeetingApplication')}
+      onApplicationCheckPress={() => navigation.navigate('ApplicationCheck')}/>
 
       <FlatList
         data={posts}
@@ -94,7 +98,7 @@ const MeetingScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: '100%',
+    height: height,
     backgroundColor: '#ffffff',
   },
   topText: {

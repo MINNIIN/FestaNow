@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.festanow.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.festanow.permission.C2D_MESSAGE" />
 
     <application
       android:name=".MainApplication"
@@ -35,6 +39,15 @@
                 <data android:scheme="naverlogin" />
             </intent-filter>
         </activity>
+        
+        <!-- Firebase Messaging Service 등록 -->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         
     </application>
 </manifest>
