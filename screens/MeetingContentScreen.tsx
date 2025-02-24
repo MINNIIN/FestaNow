@@ -140,7 +140,12 @@ const MeetingContentScreen = ({ route, navigation }: Props) => {
             </ScrollView>
 
             {!isAuthor && (
-              <MeetingJoinButton postId={post.id} userId={auth().currentUser?.uid || ''} />
+              <MeetingJoinButton postId={post.id} userId={auth().currentUser?.uid || ''} 
+              onJoinPress={() => navigation.navigate('MeetingJoin',{
+                postId: post.id,
+                authorId: post.authorId,
+                userId: auth().currentUser?.uid
+              })}/>
             )}
 
             {/* HomeBottomMenu는 키보드 영향을 받지 않도록 분리 */}
@@ -176,6 +181,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,  // 컨텐츠의 길이에 맞게 스크롤 가능하도록 설정
     alignItems: 'center',
     paddingBottom: 150,  // 하단 공간 확보
+    minHeight: height,
   },
   bottomMenuContainer: {
     position: 'absolute',

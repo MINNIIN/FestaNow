@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, FlatList, Text, StyleSheet, Dimensions, TouchableOpacity, Button, Image } from "react-native";
+import { View, TextInput, FlatList, Text, StyleSheet, Dimensions, TouchableOpacity, Button, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import ScreenTitle from "../component/ScreenTitle";
@@ -67,7 +67,7 @@ const MeetingSearchScreen = ({ navigation }: Props) => {
       <ScreenTitle
         onLeftPress={() => navigation.goBack()}
         onLogoPress={() => navigation.navigate("Home")}
-        onMyPagePress={() => navigation.navigate("MyPage")}
+        onMyPagePress={() => navigation.navigate("FirstMypage")}
       />
 
       <View style={styles.searchContainer}>
