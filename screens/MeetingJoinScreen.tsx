@@ -28,7 +28,7 @@ const MeetingJoinScreen = ({ navigation, route }: Props) => {
             const userDoc = await firestore().collection("users").doc(userId).get();
             console.log("Firestore에서 가져온 신청자 문서:", userDoc.data()); 
             
-            return userDoc.exists ? userDoc.data()?.nicName : "익명 사용자"; // nicName 없을 경우 기본값 설정
+            return userDoc.exists && userDoc.data()?.nicName ? userDoc.data()?.nicName : "unknown";   // nicName 없을 경우 기본값 설정
         } catch (error) {
             console.error("신청자의 nicName 조회 실패:", error);
             return "익명 사용자"; 
@@ -77,15 +77,19 @@ const MeetingJoinScreen = ({ navigation, route }: Props) => {
         }
         try {
             const db = firestore();
+            const applicantNicName = await getApplicantNicName(userId);
+            const meetingDoc = await db.collection("meetings").doc(postId).get();
+            const meetingTitle = meetingDoc.exists ? meetingDoc.data()?.title : "모임";
             await db.collection("meetings").doc(postId).collection("applications").add({
                 userId, 
                 authorId, 
                 message, 
                 createdAt: firestore.FieldValue.serverTimestamp(),
+                nicName: applicantNicName,  // 신청자의 nicName
+                meetingTitle: meetingTitle,  // 모임의 title
+                postId,  // 모임의 ID 추가
             });
-            const applicantNicName = await getApplicantNicName(userId);
-            const meetingDoc = await db.collection("meetings").doc(postId).get();
-            const meetingTitle = meetingDoc.exists ? meetingDoc.data()?.title : "모임";
+            
             await sendPushNotification(authorId, meetingTitle, applicantNicName);
             Alert.alert("신청 완료", "모임 참여 신청이 완료되었습니다!");
             navigation.navigate("Home");

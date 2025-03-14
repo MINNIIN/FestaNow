@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { View, Dimensions, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
@@ -17,17 +17,19 @@ type Props = {
 };
 
 const MeetingApplicationCheck = ({ navigation }: Props) => {
-    const [myApplications, setMyApplications] = useState<{ id: string; message: string }[]>([]);
-    const [receivedApplications, setReceivedApplications] = useState<{ id: string; message: string }[]>([]);
+    const [myApplications, setMyApplications] = useState<{ id: string; postId: string; message: string; createdAt: string; nicName: string; title: string; imageUrl: string; }[]>([]);
+    const [receivedApplications, setReceivedApplications] = useState<{ id: string; postId: string; message: string; createdAt: string; nicName: string; title: string; imageUrl: string; }[]>([]);
     const [selectedApplication, setSelectedApplication] = useState<any>(null);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedTab, setSelectedTab] = useState<"received" | "sent">("received"); // 탭 상태 추가
+    
     const user = auth().currentUser;
     const userId = user?.uid;
 
     useEffect(() => {
-        if (!userId) return; // 로그인한 사용자 ID가 없으면 실행하지 않음
+        if (!userId) return;
 
-        // 내가 신청한 모임 목록 실시간 업데이트.
+        // 내가 신청한 신청서 내용 업데이트
         const unsubscribeMyApplications = firestore()
             .collectionGroup("applications")
             .where("userId", "==", userId)
@@ -42,7 +44,7 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
                 }
             );
 
-        // 내가 운영하는 모임에 도착한 신청서 실시간 업데이트
+            // 내 모임에 도착한 신청서 업데이트
         const unsubscribeReceivedApplications = firestore()
             .collectionGroup("applications")
             .where("authorId", "==", userId)
@@ -65,20 +67,20 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
 
     if (!userId) {
         console.error("사용자 ID를 가져올 수 없습니다.");
-        return null; // 렌더링 방지
+        return null;
     }
 
     const handleApplicationClick = (application: any) => {
         setSelectedApplication(application);
         setModalVisible(true);
-      };
-    
-      const handleCloseModal = () => {
+    };
+
+    const handleCloseModal = () => {
         setModalVisible(false);
         setSelectedApplication(null);
-      };
-    
-      const handleCancelApplication = (applicationId: string) => {
+    };
+
+    const handleCancelApplication = (applicationId: string) => {
         // 신청 취소 로직 (Firebase, API 호출 등)
         console.log(`신청 취소: ${applicationId}`);
       };
@@ -101,13 +103,32 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
                 onMyPagePress={() => navigation.navigate("FirstMypage")}
             />
 
-            {/* 본인이 신청한 모임 리스트 */}
-      <MeetingApplicationContent title="내가 신청한 모임" applications={myApplications} onApplicationClick={handleApplicationClick} />
+            {/* 탭 메뉴 */}
+            <View style={styles.tabContainer}>
+                <TouchableOpacity 
+                    style={[styles.tabButton, selectedTab === "received" && styles.activeTab]} 
+                    onPress={() => setSelectedTab("received")}
+                >
+                    <Text style={[styles.tabText, selectedTab === "received" && styles.activeTabText]}>
+                        도착한 신청서
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.tabButton, selectedTab === "sent" && styles.activeTab]} 
+                    onPress={() => setSelectedTab("sent")}
+                >
+                    <Text style={[styles.tabText, selectedTab === "sent" && styles.activeTabText]}>
+                        신청한 신청서
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
-      {/* 본인 모임에 도착한 신청 리스트 (모임장일 경우만 표시) */}
-      {receivedApplications.length > 0 && (
-        <MeetingApplicationContent title="내 모임에 도착한 신청서" applications={receivedApplications} onApplicationClick={handleApplicationClick} />
-      )}
+            {/* 선택된 탭에 따라 다른 내용 표시 */}
+            {selectedTab === "received" ? (
+                <MeetingApplicationContent  applications={receivedApplications} onApplicationClick={handleApplicationClick} />
+            ) : (
+                <MeetingApplicationContent  applications={myApplications} onApplicationClick={handleApplicationClick} />
+            )}
 
             <View style={styles.bottomMenuContainer}>
                 <HomeBottomMenu
@@ -119,7 +140,7 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
             </View>
 
             {/* 신청서 모달 */}
-      {selectedApplication && (
+            {selectedApplication && (
         <ApplicationModal
           visible={isModalVisible}
           application={selectedApplication}
@@ -140,6 +161,30 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         backgroundColor: "#fff",
+    },
+    tabContainer: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 10,
+        borderBottomWidth: 2,
+        borderBottomColor: "#ccc",
+    },
+    tabButton: {
+        flex: 1,
+        paddingVertical: 12,
+        alignItems: "center",
+    },
+    activeTab: {
+        borderBottomWidth: 3,
+        borderBottomColor: "#FF4848",
+    },
+    tabText: {
+        fontSize: 16,
+        color: "#666",
+    },
+    activeTabText: {
+        color: "#FF4848",
+        fontWeight: "bold",
     },
     bottomMenuContainer: {
         position: "absolute",
