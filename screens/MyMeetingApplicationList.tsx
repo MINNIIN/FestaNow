@@ -4,6 +4,7 @@ import { TouchableOpacity, StyleSheet, Text, View, Dimensions } from "react-nati
 import { StackNavigationProp } from "@react-navigation/stack";
 import ScreenTitle from "../component/ScreenTitle";
 import HomeBottomMenu from "../component/HomeBottomMenu";
+import MyMeetingApplicationListContent from "../component/MeetingComponent/MyMeetingApplicationListContent";
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,7 +23,10 @@ const MyMeetingApplicationList = ({navigation}: Props) => {
             onLogoPress={() => navigation.navigate("Home")}
             onMyPagePress={() => navigation.navigate("FirstMypage")}
             />
-            <Text>List</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>내 모임</Text>
+            </View>
+            <MyMeetingApplicationListContent />
 
             <View style={styles.bottomMenuContainer}>
                 <HomeBottomMenu
@@ -40,6 +44,28 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
+        
+    },
+    titleContainer: {
+        backgroundColor: "#fff",
+        borderBottomWidth: 3,
+        borderBottomColor: "#FF4848",
+        // borderTopWidth: 2,
+        // borderTopColor: "#ddd",
+        // shadowColor: "#000",
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 4,
+        // elevation: 6,
+    },
+    titleText: {
+        textAlign: "center",
+        // marginLeft: 10,
+        marginTop: 10,
+        fontSize: 18,
+        color: "#FF4848",
+        marginBottom: 10,
+        fontWeight: "bold",
     },
     bottomMenuContainer: {
         position: "absolute",

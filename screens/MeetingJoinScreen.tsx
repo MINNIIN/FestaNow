@@ -22,6 +22,17 @@ const MeetingJoinScreen = ({ navigation, route }: Props) => {
     const [message, setMessage] = useState("");
     const { postId, userId, authorId } = route.params ?? { postId: "", userId: "", authorId: "" };
 
+    // 신청자의 fcmToken 가져옴
+    const getApplicantFcmToken = async (userId: string) => {
+        try {
+            const userDoc = await firestore().collection("users").doc(userId).get();
+            return userDoc.exists ? userDoc.data()?.fcmToken : null;
+        } catch (error) {
+            console.error("신청자의 FCM 토큰 조회 실패:", error);
+            return null;
+        }
+    };
+
     // 신청자 정보 가져옴
     const getApplicantNicName = async (userId: string) => {
         try {
@@ -80,6 +91,8 @@ const MeetingJoinScreen = ({ navigation, route }: Props) => {
             const applicantNicName = await getApplicantNicName(userId);
             const meetingDoc = await db.collection("meetings").doc(postId).get();
             const meetingTitle = meetingDoc.exists ? meetingDoc.data()?.title : "모임";
+            const imageUrl = meetingDoc.exists ? meetingDoc.data()?.imageUrl : "NoImage";
+            const applicantFcmToken = await getApplicantFcmToken(userId);
             await db.collection("meetings").doc(postId).collection("applications").add({
                 userId, 
                 authorId, 
@@ -87,7 +100,10 @@ const MeetingJoinScreen = ({ navigation, route }: Props) => {
                 createdAt: firestore.FieldValue.serverTimestamp(),
                 nicName: applicantNicName,  // 신청자의 nicName
                 meetingTitle: meetingTitle,  // 모임의 title
+                imageUrl : imageUrl,
                 postId,  // 모임의 ID 추가
+                status: "pending",
+                fcmToken: applicantFcmToken, // 신청자의 fcmToken
             });
             
             await sendPushNotification(authorId, meetingTitle, applicantNicName);
