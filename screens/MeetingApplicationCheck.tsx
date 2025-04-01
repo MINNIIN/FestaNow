@@ -7,6 +7,7 @@ import ScreenTitle from "../component/ScreenTitle";
 import HomeBottomMenu from "../component/HomeBottomMenu";
 import MeetingApplicationContent from "../component/MeetingComponent/MeetingApplicationContent";
 import ApplicationModal from "../component/MeetingComponent/ApplicationModal";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,52 +24,95 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedTab, setSelectedTab] = useState<"received" | "sent">("received"); // 탭 상태 추가
     
-    const user = auth().currentUser;
-    const userId = user?.uid;
+    const userId = auth().currentUser?.uid ?? "";
 
     useEffect(() => {
         if (!userId) return;
 
-        // 내가 신청한 신청서 내용 업데이트
-        const unsubscribeMyApplications = firestore()
-            .collectionGroup("applications")
-            .where("userId", "==", userId)
-            .onSnapshot(
-                (snapshot) => {
-                    if (snapshot) {
-                        setMyApplications(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)));
-                    }
-                },
-                (error) => {
-                    console.error("내 신청 내역을 가져오는 중 오류 발생:", error);
-                }
-            );
-
-            // 내 모임에 도착한 신청서 업데이트
-        const unsubscribeReceivedApplications = firestore()
-            .collectionGroup("applications")
-            .where("authorId", "==", userId)
-            .onSnapshot(
-                (snapshot) => {
-                    if (snapshot) {
-                        setReceivedApplications(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)));
-                    }
-                },
-                (error) => {
-                    console.error("내 모임 신청 내역을 가져오는 중 오류 발생:", error);
-                }
-            );
-
-        return () => {
-            unsubscribeMyApplications();
-            unsubscribeReceivedApplications();
-        };
+        fetchMyApplications();
+        fetchReceivedApplications();
     }, [userId]);
 
+    useEffect(() => {
+        if (!userId) return;
+    
+        const unsubscribeReceived = firestore()
+            .collection("meetings")
+            .where("authorId", "==", userId)
+            .onSnapshot((snapshot) => {
+                console.log("Firestore snapshot:", snapshot.docs.map(doc => doc.data())); // 데이터 확인
+    
+                const receivedApps = snapshot.docs.map((doc) => {
+                    const data = doc.data();
+                    console.log("Received application data:", data); // 개별 데이터 확인
+                    return {
+                        id: doc.id,
+                        postId: data.postId || "",  // 필드가 존재하지 않을 경우 기본값 설정
+                        message: data.message || "",
+                        createdAt: data.createdAt || "",
+                        nicName: data.nicName || "",
+                        title: data.title || "",
+                        imageUrl: data.imageUrl || "",
+                    };
+                });
+    
+                setReceivedApplications(receivedApps);
+            });
+    
+        return () => unsubscribeReceived();
+    }, [userId]);
+
+    const fetchMyApplications = async () => {
+    // const userId = auth().currentUser?.uid;  
     if (!userId) {
-        console.error("사용자 ID를 가져올 수 없습니다.");
-        return null;
+        console.log("사용자가 로그인되지 않았습니다.");
+        return;  // 로그인이 되어 있지 않으면 API를 호출하지 않음
     }
+
+    try {
+        const response = await fetch(`http://192.168.219.204:8081/api/applications/sent/${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setMyApplications(data);
+    } catch (error) {
+        console.error("내 신청 내역을 불러오는 중 오류 발생:", error);
+    }
+};
+
+const fetchReceivedApplications = async () => {
+    // const userId = auth().currentUser?.uid;
+    if (!userId) {
+        console.log("사용자가 로그인되지 않았습니다.");
+        return;  // 로그인이 되어 있지 않으면 API를 호출하지 않음
+    }
+
+    try {
+        const response = await fetch(`http://192.168.219.204:8081/api/applications/received/${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setReceivedApplications(data);
+    } catch (error) {
+        console.error("내 모임 신청 내역을 불러오는 중 오류 발생:", error);
+    }
+};
 
     const handleApplicationClick = (application: any) => {
         setSelectedApplication(application);
@@ -80,20 +124,79 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
         setSelectedApplication(null);
     };
 
-    const handleCancelApplication = (applicationId: string) => {
-        // 신청 취소 로직 (Firebase, API 호출 등)
-        console.log(`신청 취소: ${applicationId}`);
-      };
+    const handleCancelApplication = async (applicationId: string) => {
+    try {
+        const response = await axios.delete(
+            `http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${applicationId}`
+        );
+
+        if (response.status === 200) {
+            alert('신청서가 취소되었습니다.');
+            // ✅ UI에서 신청서 제거
+            setReceivedApplications((prev) => prev.filter((item) => item.id !== applicationId));
+        }
+    } catch (error) {
+        console.error('신청서 취소 중 오류 발생:', error);
+        alert('취소 중 오류가 발생했습니다.');
+    }
+
+    setModalVisible(false);
+};
     
-      const handleAcceptApplication = (applicationId: string) => {
-        // 신청 승인 로직 (Firebase, API 호출 등)
-        console.log(`신청 승인: ${applicationId}`);
-      };
+    const handleAcceptApplication = async (application: any) => {
+        if (!application?.id || !application?.postId) {
+            console.error("오류: application.id 또는 application.postId가 존재하지 않음");
+            return;
+        }
     
-      const handleRejectApplication = (applicationId: string) => {
-        // 신청 거절 로직 (Firebase, API 호출 등)
-        console.log(`신청 거절: ${applicationId}`);
-      };
+        console.log("신청서 승인 요청:", application.id, application.postId);
+
+        try {
+            // ✅ 백엔드 API 호출 (신청서 승인 요청)
+            const response = await fetch(`http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${application.id}/status?status=approved`, {
+                method: "PATCH",
+            });
+    
+            const result = await response.text();
+            console.log("승인 결과:", result);
+    
+            if (response.ok) {
+                alert("신청서가 승인되었습니다.");
+    
+                // ✅ UI 업데이트: 리스트에서 삭제
+                setReceivedApplications((prev) => prev.filter((item) => item.id !== application.id));
+            } else {
+                alert("승인에 실패했습니다: " + result);
+            }
+        } catch (error) {
+            console.error("신청서 승인 중 오류 발생:", error);
+            alert("승인 중 오류가 발생했습니다.");
+        }
+        setModalVisible(false);
+    };
+    
+    const handleRejectApplication = async (applicationId: string) => {
+        try {
+            const response = await axios.delete(
+                `http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${applicationId}`
+            );
+    
+            if (response.status === 200) {
+                alert('신청서가 거절되었습니다.');
+                // ✅ UI에서 신청서 제거
+                setReceivedApplications((prev) => prev.filter((item) => item.id !== applicationId));
+            }
+        } catch (error) {
+            console.error('신청서 거절 중 오류 발생:', error);
+            alert('거절 중 오류가 발생했습니다.');
+        }
+    
+        setModalVisible(false);
+    };
+
+    useEffect(() => {
+        // receivedApplications 상태가 변경될 때마다 UI가 자동으로 업데이트됩니다.
+    }, [receivedApplications]);
 
     return (
         <View style={styles.container}>
@@ -146,7 +249,10 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
           application={selectedApplication}
           onClose={handleCloseModal}
           onCancelApplication={handleCancelApplication}
-          onAcceptApplication={handleAcceptApplication}
+          onAcceptApplication={() => {
+            console.log("승인 버튼 클릭됨", selectedApplication);
+            handleAcceptApplication(selectedApplication);
+            }}
           onRejectApplication={handleRejectApplication}
           userId={userId}
         />
