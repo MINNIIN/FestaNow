@@ -89,7 +89,7 @@ const LoginScreen = ({ navigation }: Props) => {
         style={styles.backgroundImage}
       >
         <View style={styles.overlay}>
-          <TouchableOpacity onPress={handleLogo}>
+          <TouchableOpacity>
             <Image source={require('../images/festanow_logo_black_red.png')} style={styles.logoImage} />
           </TouchableOpacity>
 

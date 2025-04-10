@@ -25,25 +25,9 @@ const HomeScreen = ({ navigation }: Props) => {
   const categoryButton = [
     { id: 1, label: '콘서트', icon: require('../images/concert_icon.png') },
     { id: 2, label: '뮤지컬', icon: require('../images/musical_icon.png') },
-    { id: 3, label: '전시', icon: require('../images/gallery_icon.png') },
+    { id: 3, label: '연극', icon: require('../images/play_icon.png') },
     { id: 4, label: '클래식', icon: require('../images/classic_icon.png') },
   ];
-
-  // const getFcmToken = async () => {
-  //   const fcmToken = await messaging().getToken();
-  //   console.log('FCM Token:', fcmToken);
-
-  //   const currentUser = auth().currentUser;
-  //     if (currentUser) {
-  //       await firestore().collection('users').doc(currentUser.uid).set(
-  //         {
-  //           fcmToken: fcmToken, // FCM 토큰 저장
-  //         },
-  //         { merge: true } // 기존 데이터 덮어쓰지 않도록 merge 옵션 사용
-  //       );
-  //       console.log('FCM 토큰 Firestore에 저장 성공');
-  //     }
-  // }
   
   return (
     <View style={styles.container}>
@@ -56,7 +40,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
       <HomeImageSlide />
       <HomeSearch searchText={searchText} setSearchText={setSearchText} />
-      <HomeCategory categories={categoryButton} />
+      <HomeCategory categories={categoryButton} navigation={navigation} />
       
       
 

@@ -9,13 +9,37 @@ type Category = {
 
 type Props = {
   categories: Category[];
+  navigation: any;
 };
 
-const HomeCategory: React.FC<Props> = ({ categories }) => {
+const HomeCategory: React.FC<Props> = ({ categories, navigation }) => {
+  const handleCategoryPress = (label: string) => {
+    switch (label) {
+      case '콘서트':
+        navigation.navigate('Concert');
+        break;
+      case '뮤지컬':
+        navigation.navigate('Musical');
+        break;
+      case '연극':
+        navigation.navigate('Play');
+        break;
+      case '클래식':
+        navigation.navigate('Classic');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <View style={styles.buttonBox}>
       {categories.map((category) => (
-        <TouchableOpacity key={category.id} style={styles.categoryButton}>
+        <TouchableOpacity
+          key={category.id}
+          style={styles.categoryButton}
+          onPress={() => handleCategoryPress(category.label)}
+        >
           <Image source={category.icon} style={styles.categoryIcon} />
           <Text style={styles.buttonText}>{category.label}</Text>
         </TouchableOpacity>
@@ -66,7 +90,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: '#8C8C8C',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'GothicA1-SemiBold'
   },
 });
 

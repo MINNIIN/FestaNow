@@ -10,7 +10,6 @@ import notifee from '@notifee/react-native';
 import HomeScreen from './screens/HomeScreen';
 import SplashScreen from './screens/SplashScreen';
 import LoginScreen from './screens/LoginScreen';
-import ConcertScreen from './screens/ConcertScreen';
 import MypageScreen from './screens/MypageScreen';
 import MeetingScreen from './screens/MeetingScreen';
 import MeetingCreateScreen from './screens/MeetingCreateScreen';
@@ -24,6 +23,17 @@ import MeetingSearchScreen from './screens/MeetingSearchScreen';
 import MeetingJoinScreen from './screens/MeetingJoinScreen';
 import MyMeetingApplicationList from './screens/MyMeetingApplicationList';
 import MeetingApplicationCheck from './screens/MeetingApplicationCheck';
+import ConcertScreen from './screens/HomeCategoryScreens/ConcertScreen';
+import MusicalScreen from './screens/HomeCategoryScreens/MusicalScreen';
+import PlayScreen from './screens/HomeCategoryScreens/PlayScreen';
+import ClassicScreen from './screens/HomeCategoryScreens/ClassicScreen';
+import HomeSearchDetail from './component/HomeSearchDetail';
+import ClassicDetail from './screens/HomeCategoryScreens/ClassicDetail';
+import ConcertDetail from './screens/HomeCategoryScreens/ConcertDetail';
+import MusicalDetail from './screens/HomeCategoryScreens/MusicalDetail';
+import PlayDetail from './screens/HomeCategoryScreens/PlayDetail';
+
+
 
 import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
@@ -34,6 +44,9 @@ export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   Concert: undefined;
+  Musical: undefined;
+  Play: undefined;
+  Classic: undefined;
   Mypage: undefined;
   Meeting: undefined;
   MeetingCreate: undefined;
@@ -47,6 +60,11 @@ export type RootStackParamList = {
   MeetingJoin: undefined;
   MyMeetingApplication: undefined;
   ApplicationCheck: undefined;
+  HomeSearchDetail: { keyword: string };
+  ClassicDetail: { id: string };
+  ConcertDetail: { id: string };
+  MusicalDetail: { id: string };
+  PlayDetail: { id: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -167,6 +185,9 @@ const App = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Concert" component={ConcertScreen} />
+        <Stack.Screen name="Musical" component={MusicalScreen} />
+        <Stack.Screen name="Play" component={PlayScreen} />
+        <Stack.Screen name="Classic" component={ClassicScreen} />
         <Stack.Screen name="Mypage" component={MypageScreen} />
         <Stack.Screen name="Meeting" component={MeetingScreen} />
         <Stack.Screen name="MeetingCreate" component={MeetingCreateScreen} />
@@ -180,6 +201,11 @@ const App = () => {
         <Stack.Screen name="MeetingJoin" component={MeetingJoinScreen} />
         <Stack.Screen name="MyMeetingApplication" component={MyMeetingApplicationList} />
         <Stack.Screen name="ApplicationCheck" component={MeetingApplicationCheck} />
+        <Stack.Screen name="HomeSearchDetail" component={HomeSearchDetail} />
+        <Stack.Screen name="ClassicDetail" component={ClassicDetail} />
+        <Stack.Screen name="ConcertDetail" component={ConcertDetail} />
+        <Stack.Screen name="MusicalDetail" component={MusicalDetail} />
+        <Stack.Screen name="PlayDetail" component={PlayDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
