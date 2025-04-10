@@ -70,7 +70,7 @@ const MeetingApplicationCheck = ({ navigation }: Props) => {
     }
 
     try {
-        const response = await fetch(`http://192.168.219.204:8081/api/applications/sent/${userId}`, {
+        const response = await fetch(`http://192.168.1.13:8081/api/applications/sent/${userId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -96,7 +96,7 @@ const fetchReceivedApplications = async () => {
     }
 
     try {
-        const response = await fetch(`http://192.168.219.204:8081/api/applications/received/${userId}`, {
+        const response = await fetch(`http://192.168.1.13:8081/api/applications/received/${userId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -127,12 +127,12 @@ const fetchReceivedApplications = async () => {
     const handleCancelApplication = async (applicationId: string) => {
     try {
         const response = await axios.delete(
-            `http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${applicationId}`
+            `http://192.168.1.13:8081/api/applications/${selectedApplication.postId}/${applicationId}`
         );
 
         if (response.status === 200) {
             alert('신청서가 취소되었습니다.');
-            // ✅ UI에서 신청서 제거
+            // UI에서 신청서 제거
             setReceivedApplications((prev) => prev.filter((item) => item.id !== applicationId));
         }
     } catch (error) {
@@ -152,8 +152,8 @@ const fetchReceivedApplications = async () => {
         console.log("신청서 승인 요청:", application.id, application.postId);
 
         try {
-            // ✅ 백엔드 API 호출 (신청서 승인 요청)
-            const response = await fetch(`http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${application.id}/status?status=approved`, {
+            // 백엔드 API 호출 (신청서 승인 요청)
+            const response = await fetch(`http://192.168.1.13:8081/api/applications/${selectedApplication.postId}/${application.id}/status?status=approved`, {
                 method: "PATCH",
             });
     
@@ -162,9 +162,16 @@ const fetchReceivedApplications = async () => {
     
             if (response.ok) {
                 alert("신청서가 승인되었습니다.");
-    
-                // ✅ UI 업데이트: 리스트에서 삭제
+                // UI 업데이트: 리스트에서 삭제
                 setReceivedApplications((prev) => prev.filter((item) => item.id !== application.id));
+
+                // 푸시 알림 전송 API 호출 (20250401) / 배포해둔 ip주소이므로 수정안해도됨
+            await axios.post("http://13.209.103.241:8080/api/send-notification", {
+                targetToken: application.fcmToken, // 신청자의 FCM 토큰
+                title: "신청 승인됨",
+                message: `"${application.applicantNicName}"님의 신청이 승인되었습니다.`,
+            });
+
             } else {
                 alert("승인에 실패했습니다: " + result);
             }
@@ -175,27 +182,50 @@ const fetchReceivedApplications = async () => {
         setModalVisible(false);
     };
     
-    const handleRejectApplication = async (applicationId: string) => {
+    const handleRejectApplication = async () => {
+        if (!selectedApplication?.id || !selectedApplication?.postId) {
+            console.error("오류: selectedApplication.id 또는 selectedApplication.postId가 존재하지 않음");
+            return;
+        }
+    
+        console.log("신청서 거절 요청:", selectedApplication.id, selectedApplication.postId);
+    
         try {
-            const response = await axios.delete(
-                `http://192.168.219.204:8081/api/applications/${selectedApplication.postId}/${applicationId}`
+            const response = await fetch(
+                `http://192.168.1.13:8081/api/applications/${selectedApplication.postId}/${selectedApplication.id}/status?status=rejected`,
+                {
+                    method: "PATCH",
+                }
             );
     
-            if (response.status === 200) {
-                alert('신청서가 거절되었습니다.');
-                // ✅ UI에서 신청서 제거
-                setReceivedApplications((prev) => prev.filter((item) => item.id !== applicationId));
+            const result = await response.text();
+            console.log("거절 결과:", result);
+    
+            if (response.ok) {
+                alert("신청서가 거절되었습니다.");
+                setReceivedApplications((prev) => prev.filter((item) => item.id !== selectedApplication.id));
+
+                // 푸시 알림 전송 API 호출 (거절 알림) / 배포해둔 ip주소이므로 수정안해도됨
+            await axios.post("http://13.209.103.241:8080/api/send-notification", {
+                targetToken: selectedApplication.fcmToken, // 신청자의 FCM 토큰
+                title: "신청 거절됨",
+                message: `죄송합니다. "${selectedApplication.applicantNicName}"님의 신청이 거절되었습니다.`,
+            });
+            
+            } else {
+                alert("거절에 실패했습니다: " + result);
             }
         } catch (error) {
-            console.error('신청서 거절 중 오류 발생:', error);
-            alert('거절 중 오류가 발생했습니다.');
+            console.error("신청서 거절 중 오류 발생:", error);
+            alert("거절 중 오류가 발생했습니다.");
         }
     
         setModalVisible(false);
     };
+    
 
     useEffect(() => {
-        // receivedApplications 상태가 변경될 때마다 UI가 자동으로 업데이트됩니다.
+        // receivedApplications 상태가 변경될 때마다 UI가 자동으로 업데이트.
     }, [receivedApplications]);
 
     return (

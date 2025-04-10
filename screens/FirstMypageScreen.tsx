@@ -7,6 +7,8 @@ import MyPageCategory from '../component/MyPageComponent/MyPageCategory';
 import HomeBottomMenu from '../component/HomeBottomMenu';
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
+import MyPageMiddleContent from '../component/MyPageComponent/MyPageMiddleContent';
+import MyPageBottomContent from '../component/MyPageComponent/MyPageBottomContent';
 
 const { width, height } = Dimensions.get('window');
 
@@ -80,7 +82,7 @@ const FirstMypageScreen = ({ navigation }: Props) => {
 
   const categoryButton = [
     { id: 1, label: '회원정보수정', icon: require('../images/edit_user_icon.png') },
-    { id: 2, label: '비밀번호변경', icon: require('../images/unlock_icon.png') },
+    { id: 2, label: '문의하기', icon: require('../images/inquiry_icon.png') },
     { id: 3, label: '설정', icon: require('../images/option_icon.png') },
     { id: 4, label: '로그아웃', icon: require('../images/exit_icon.png'), action: handleSignOut },
   ];
@@ -103,12 +105,8 @@ const FirstMypageScreen = ({ navigation }: Props) => {
       <MyPageCategory categories={categoryButton} onCategoryPress={handleCategoryPress} />
 
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      <TouchableOpacity onPress={() => console.log('최근 본 상품 클릭')}>
-        <Text style={styles.textButton}>최근 본 상품</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => console.log('공지사항 클릭')}>
-        <Text style={styles.textButton}>공지사항</Text>
-      </TouchableOpacity>
+      <MyPageMiddleContent />
+      <MyPageBottomContent />
 
       <HomeBottomMenu 
         onHomePress={() => navigation.navigate('Home')}
