@@ -1,6 +1,6 @@
 // ClassicDetail.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { XMLParser } from 'fast-xml-parser';
@@ -100,55 +100,77 @@ const MusicalDetail = ({ route, navigation }: Props) => {
         )}
       </View>
     </ScrollView>
-    </View>
-  );
-};
 
-const styles = StyleSheet.create({
-  scrollContainer: { flex: 1, backgroundColor: '#fff' },
-  container: {
-    width: width,
-    height: height,
-    flex: 1, 
-    backgroundColor: '#fff'
-  },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  poster: {
-    width: '100%',
-    height: 300,
-    resizeMode: 'cover',
-  },
-  content: {
-    padding: 16,
-  },
-  title: {
-    fontSize: 22,
-    marginBottom: 10,
-    color: '#353535',
-    fontFamily: 'NotoSansKR-Medium',
-  },
-  info: {
-    fontSize: 16,
-    marginBottom: 10,
-    fontFamily: 'GothicA1-Regular',
-  },
-  sectionTitle: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  story: {
-    marginTop: 8,
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  introImage: {
-    width: '100%',
-    height: height * 0.6,
-    marginTop: 10,
-    resizeMode: 'cover',
-  },
-});
+    <TouchableOpacity
+          style={styles.createButton}
+          onPress={() => navigation.navigate('MeetingCreate', {
+            performanceName: detail.prfnm, // 공연 이름 전달
+          })}
+        >
+          <Text style={styles.createButtonText}>모임 생성하기</Text>
+        </TouchableOpacity>
+    
+        </View>
+      );
+    };
+    
+    const styles = StyleSheet.create({
+      scrollContainer: { flex: 1, backgroundColor: '#fff' },
+      container: {
+        width: width,
+        height: height,
+        flex: 1, 
+        backgroundColor: '#fff'
+      },
+      center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+      poster: {
+        width: '100%',
+        height: 300,
+        resizeMode: 'cover',
+      },
+      content: {
+        padding: 16,
+      },
+      title: {
+        fontSize: 22,
+        marginBottom: 10,
+        color: '#353535',
+        fontFamily: 'NotoSansKR-Medium',
+      },
+      info: {
+        fontSize: 16,
+        marginBottom: 10,
+        fontFamily: 'GothicA1-Regular',
+      },
+      sectionTitle: {
+        marginTop: 20,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+      },
+      story: {
+        marginTop: 8,
+        fontSize: 15,
+        lineHeight: 22,
+      },
+      introImage: {
+        width: '100%',
+        height: height * 0.6,
+        marginTop: 10,
+        resizeMode: 'cover',
+      },
+      createButton: {
+        backgroundColor: '#FF5757',
+        padding: 15,
+        borderRadius: 10,
+        margin: 10,
+        alignItems: 'center',
+      },
+      createButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily: 'GothicA1-Regular'
+      },
+    });
 
 export default MusicalDetail;

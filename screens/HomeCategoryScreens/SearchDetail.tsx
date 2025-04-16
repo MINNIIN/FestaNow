@@ -10,14 +10,14 @@ import { RootStackParamList } from '../../App';
 
 const {width, height} = Dimensions.get('window')
 
-type ClassicDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ClassicDetail'>;
+type SearchDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SearchDetail'>;
 
 type Props = {
-  navigation: ClassicDetailScreenNavigationProp;
+  navigation: SearchDetailScreenNavigationProp;
   route: any; // route.params.id 사용하려면 정확한 타입도 설정 가능
 };
 
-const ClassicDetail = ({ route, navigation }: Props) => {
+const SearchDetail = ({ route, navigation }: Props) => {
   const { id } = route.params;
   const [detail, setDetail] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -165,4 +165,4 @@ const ClassicDetail = ({ route, navigation }: Props) => {
       },
     });
 
-export default ClassicDetail;
+export default SearchDetail;

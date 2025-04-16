@@ -6,7 +6,11 @@ import MeetingCard from "./MeetingCard"; // 모임을 카드 형태로 보여줄
 
 const { width, height } = Dimensions.get("window");
 
-const MyMeetingApplicationListContent = () => {
+type Props = {
+    navigation: any;
+};
+
+const MyMeetingApplicationListContent = ({ navigation }: Props) => {
     const [meetings, setMeetings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const currentUser = auth().currentUser;
@@ -69,7 +73,16 @@ const MyMeetingApplicationListContent = () => {
                 <FlatList
                     data={meetings}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <MeetingCard meeting={item} />}
+                    renderItem={({ item }) => (
+                        <MeetingCard 
+                            meeting={item} 
+                            onPress={() => navigation.navigate("ChatRoom", {
+                                meetingId: item.id,
+                                meetingTitle: item.title,
+                                performanceName: item.performanceName,
+                            })}
+                        />
+                    )}
                     contentContainerStyle={styles.scrollContent}
                 />
             ) : (

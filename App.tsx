@@ -32,6 +32,9 @@ import ClassicDetail from './screens/HomeCategoryScreens/ClassicDetail';
 import ConcertDetail from './screens/HomeCategoryScreens/ConcertDetail';
 import MusicalDetail from './screens/HomeCategoryScreens/MusicalDetail';
 import PlayDetail from './screens/HomeCategoryScreens/PlayDetail';
+import SearchDetail from './screens/HomeCategoryScreens/SearchDetail';
+// import ChattingScreen from './screens/ChattingScreen';
+import ChatRoomScreen from './screens/ChatRoomScreen';
 
 
 
@@ -49,7 +52,9 @@ export type RootStackParamList = {
   Classic: undefined;
   Mypage: undefined;
   Meeting: undefined;
-  MeetingCreate: undefined;
+  MeetingCreate: {
+    performanceName: string;
+  };
   MeetingContent: { postId: string };
   LoginInput: undefined;
   Signup: undefined;
@@ -65,6 +70,9 @@ export type RootStackParamList = {
   ConcertDetail: { id: string };
   MusicalDetail: { id: string };
   PlayDetail: { id: string };
+  SearchDetail: { id: string };
+  Chatting: undefined;
+  ChatRoom: { meetingId: string; meetingTitle: string; performanceName: string; };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -199,13 +207,16 @@ const App = () => {
         <Stack.Screen name="Schedule" component={ScheduleScreen} />
         <Stack.Screen name="MeetingSearch" component={MeetingSearchScreen} />
         <Stack.Screen name="MeetingJoin" component={MeetingJoinScreen} />
-        <Stack.Screen name="MyMeetingApplication" component={MyMeetingApplicationList} />
+        <Stack.Screen name="Chatting" component={MyMeetingApplicationList} />
         <Stack.Screen name="ApplicationCheck" component={MeetingApplicationCheck} />
         <Stack.Screen name="HomeSearchDetail" component={HomeSearchDetail} />
         <Stack.Screen name="ClassicDetail" component={ClassicDetail} />
         <Stack.Screen name="ConcertDetail" component={ConcertDetail} />
         <Stack.Screen name="MusicalDetail" component={MusicalDetail} />
         <Stack.Screen name="PlayDetail" component={PlayDetail} />
+        <Stack.Screen name="SearchDetail" component={SearchDetail} />
+        {/* <Stack.Screen name="Chatting" component={ChattingScreen} /> */}
+        <Stack.Screen name="ChatRoom" component={ChatRoomScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -13,30 +13,23 @@ type MeetingCardProps = {
         performanceName: string;
         performanceDate: string;
     };
+    onPress?: () => void;
 };
 
-const MeetingCard = ({ meeting }: MeetingCardProps) => {
-
+const MeetingCard = ({ meeting, onPress }: MeetingCardProps) => {
     const defaultImage = 'https://festanow-bucket.s3.ap-northeast-2.amazonaws.com/default+image.png';
     const navigation = useNavigation();
 
-    // 공연 날짜 출력 형태 변경
     const formattedDate = new Date(meeting.performanceDate).toLocaleDateString('ko-KR');
 
     return (
         <TouchableOpacity
             style={styles.card}
-           // 눌렀을때 모임 페이지로 넘어가도록 구현해야함
+            onPress={onPress}
         >
-            {/* 모임 이미지 */}
             <Image source={{ uri: meeting.imageUrl ? meeting.imageUrl : defaultImage }} style={styles.image} />
-
-            {/* 모임 정보 */}
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{meeting.performanceName}</Text>
-                {/* <Text style={styles.description} numberOfLines={2}>
-                    {meeting.description}
-                </Text> */}
                 <Text style={styles.description}>공연 날짜 : {formattedDate}</Text>
             </View>
         </TouchableOpacity>
