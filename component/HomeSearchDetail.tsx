@@ -22,6 +22,7 @@ type ConcertItem = {
   fcltynm: string;
   poster: string;
   prfstate: string;
+  mt20id: string;
 };
 
 const HomeSearchDetail = ({ navigation }: Props) => {
@@ -45,6 +46,7 @@ const HomeSearchDetail = ({ navigation }: Props) => {
         const filtered: ConcertItem[] = concertList
           .filter((item: any) => item.prfnm?.toLowerCase().includes(keyword.toLowerCase()))
           .map((item: any) => ({
+            mt20id: item.mt20id,
             prfnm: item.prfnm,
             prfpdfrom: item.prfpdfrom,
             prfpdto: item.prfpdto,
@@ -105,12 +107,16 @@ const HomeSearchDetail = ({ navigation }: Props) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>"{keyword}" 검색 결과</Text>
         {filteredResults.map((item, index) => (
-          <View key={index} style={styles.card}>
-            <Image source={{ uri: item.poster }} style={styles.image} />
-            <Text style={styles.name}>{item.prfnm}</Text>
-            <Text>{item.prfpdfrom} ~ {item.prfpdto}</Text>
-            <Text>{item.fcltynm}</Text>
-          </View>
+          <TouchableOpacity
+          key={index}
+          style={styles.card}
+          onPress={() => navigation.navigate('SearchDetail', { id: item.mt20id })}
+        >
+          <Image source={{ uri: item.poster }} style={styles.image} />
+          <Text style={styles.name}>{item.prfnm}</Text>
+          <Text style={styles.infoText}>{item.prfpdfrom} ~ {item.prfpdto}</Text>
+          <Text style={styles.infoText}>{item.fcltynm}</Text>
+        </TouchableOpacity>
         ))}
       </ScrollView>
 
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginBottom: 16,
-    fontWeight: 'bold',
+    fontFamily: 'GothicA1-SemiBold'
   },
   filterContainer: {
     flexDirection: 'row',
@@ -168,7 +174,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   card: {
-    width: '90%',
+    width: '95%',
     padding: 7,
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -186,7 +192,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'NotoSansKR-Medium'
+  },
+  infoText: {
+    fontFamily: 'GothicA1-Medium',
+    fontSize: 14,
+    color: '#666'
   },
 });
 

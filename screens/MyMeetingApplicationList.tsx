@@ -26,7 +26,7 @@ const MyMeetingApplicationList = ({navigation}: Props) => {
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>내 모임</Text>
             </View>
-            <MyMeetingApplicationListContent />
+            <MyMeetingApplicationListContent navigation={navigation}/>
 
             <View style={styles.bottomMenuContainer}>
                 <HomeBottomMenu

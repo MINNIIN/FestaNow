@@ -1,6 +1,6 @@
 // ClassicDetail.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { XMLParser } from 'fast-xml-parser';
@@ -81,13 +81,6 @@ const ConcertDetail = ({ route, navigation }: Props) => {
         <Text style={styles.info}>공연 시간 : {detail.dtguidance || '정보 없음'}</Text>
         <Text style={styles.info}>티켓 가격 : {detail.pcseguidance || '정보 없음'}</Text>
 
-        {/* {detail.sty && (
-          <>
-            <Text style={styles.sectionTitle}>줄거리</Text>
-            <Text style={styles.story}>{detail.sty}</Text>
-          </>
-        )} */}
-
         {detail.styurls && (
           <>
             {/* <Text style={styles.sectionTitle}>공연 이미지</Text> */}
@@ -100,6 +93,16 @@ const ConcertDetail = ({ route, navigation }: Props) => {
         )}
       </View>
     </ScrollView>
+
+    <TouchableOpacity
+      style={styles.createButton}
+      onPress={() => navigation.navigate('MeetingCreate', {
+        performanceName: detail.prfnm, // 공연 이름 전달
+      })}
+    >
+      <Text style={styles.createButtonText}>모임 생성하기</Text>
+    </TouchableOpacity>
+
     </View>
   );
 };
@@ -148,6 +151,18 @@ const styles = StyleSheet.create({
     height: height * 0.6,
     marginTop: 10,
     resizeMode: 'cover',
+  },
+  createButton: {
+    backgroundColor: '#FF5757',
+    padding: 15,
+    borderRadius: 10,
+    margin: 10,
+    alignItems: 'center',
+  },
+  createButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'GothicA1-Regular'
   },
 });
 

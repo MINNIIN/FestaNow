@@ -51,12 +51,12 @@ const HomeBottomMenu = ({onHomePress, onMeetingPress, onChattingPress, onCalenda
         <Text style={styles.bottomButtonText}>홈</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.bottomButton} onPress={onMeetingPress}>
-        <Image source={require('../images/meeting_icon.png')} style={styles.bottomImage}></Image>
-        <Text style={styles.bottomButtonText}>모임</Text>
+        <Image source={require('../images/board_icon.png')} style={styles.bottomImage}></Image>
+        <Text style={styles.bottomButtonText}>게시판</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.bottomButton} onPress={onChattingPress}>
-        <Image source={require('../images/chatting_icon.png')} style={styles.bottomImage}></Image>
-        <Text style={styles.bottomButtonText}>채팅</Text>
+        <Image source={require('../images/meeting_icon.png')} style={styles.bottomImage}></Image>
+        <Text style={styles.bottomButtonText}>모임</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.bottomButton} onPress={onCalendarPress}>
         <Image source={require('../images/calendar_icon.png')} style={styles.bottomImage}></Image>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, Text, StyleSheet, ActivityIndicator, TouchableOpacity,  FlatList, Image } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, ActivityIndicator, TouchableOpacity,  FlatList, Image, Dimensions } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { XMLParser } from 'fast-xml-parser';
 import { SERVICE_KEY, kopisURL } from '../../OAuto2';
@@ -13,6 +13,8 @@ type MusicalScreenNavigationProp = StackNavigationProp<any, 'Musical'>;
 type Props = {
   navigation: MusicalScreenNavigationProp;
 };
+
+const {width, height} = Dimensions.get('window')
 
 const MusicalScreen = ({ navigation }: Props) => {
   const [musicals, setMusicals] = useState<any[]>([]);
@@ -133,7 +135,7 @@ const MusicalScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: '#fff', height: height, width: width, alignContent: 'center', justifyContent: 'center' },
   list: {
     padding: 16,
   },

@@ -32,11 +32,14 @@ type MeetingCreateScreenNavigationProp = StackNavigationProp<any, 'MeetingCreate
 
 type Props = {
   navigation: MeetingCreateScreenNavigationProp;
+  route: any;
 };
 
-const MeetingCreateScreen = ({ navigation }: Props) => {
+const MeetingCreateScreen = ({ navigation, route }: Props) => {
   const [title, setTitle] = useState("");
-  const [performanceName, setPerformanceName] = useState("");
+  const { performanceName: routeName, performanceDate: routeDate } = route.params || {};
+  
+  const [performanceName, setPerformanceName] = useState(routeName || '');
   const [performanceDate, setPerformanceDate] = useState(new Date());
   const [participants, setParticipants] = useState("");
   const [writeContent, setWriteContent] = useState("");

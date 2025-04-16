@@ -51,7 +51,7 @@ const MeetingScreen = ({ navigation }: Props) => {
 
       {/* <Text style={styles.topText}>관심 있는 모임에 참여하거나 모임을 만들어보세요!</Text> */}
       <MeetingCategory 
-      onMyMeetingCheckPress={() => navigation.navigate('MyMeetingApplication')}
+      onMyMeetingCheckPress={() => navigation.navigate('Chatting')}
       onApplicationCheckPress={() => navigation.navigate('ApplicationCheck')}/>
 
       <FlatList
